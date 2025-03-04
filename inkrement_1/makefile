@@ -1,4 +1,4 @@
 CFLAGS=-Wall -Wextra
 
-mygrep: mygrep.cpp
+mygrep.exe: mygrep.cpp
 	g++ $(CFLAGS) -o $@ $^

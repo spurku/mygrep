@@ -31,39 +31,28 @@ void search_in_file(const std::string& file_name, const std::string& search_stri
 }
 
 int main(int argc, char* argv[]) {
-    std::string large_string, search_string;
-
-    std::cout << "Give a string from which to search for: ";
-    std::getline(std::cin, large_string);
-    std::cout << "Give search string: ";
-    std::getline(std::cin, search_string);
-
-    size_t position = large_string.find(search_string);
-
-    if (position != std::string::npos) {
-        std::cout << "\"" << search_string << "\" found in \"" << large_string 
-                  << "\" in position " << position << std::endl;
-    } else {
-        std::cout << "\"" << search_string << "\" NOT found in \"" << large_string << "\"" << std::endl;
+    if (argc < 4) {
+        std::cerr << "Usage: " << argv[0] << " -o[options] search_string file_name" << std::endl;
+        return 1;
     }
+
+    std::string options = argv[1];
+    std::string search_string = argv[2];
+    std::string file_name = argv[3];
 
     bool show_line_numbers = false;
     bool show_count = false;
-    
-    for (int i = 2; i < argc; ++i) {
-        std::string arg = argv[i];
-        if (arg == "-l") {
-            show_line_numbers = true;
+
+    if (options.size() > 2 && options[0] == '-' && options[1] == 'o') {
+        for (size_t i = 2; i < options.size(); ++i) {
+            if (options[i] == 'l') show_line_numbers = true;
+            if (options[i] == 'o') show_count = true;
         }
-        if (arg == "-o") {
-            show_count = true;
-        }
+    } else {
+        std::cerr << "Invalid options format. Use -o[options] (e.g., -ol, -oo)." << std::endl;
+        return 1;
     }
 
-    if (argc > 1) {
-        std::string file_name = argv[1];
-        search_in_file(file_name, search_string, show_line_numbers, show_count);
-    }
-
+    search_in_file(file_name, search_string, show_line_numbers, show_count);
     return 0;
 }
